@@ -1,56 +1,55 @@
-import { GlobalContext } from "../context/useGlobal";
 import React from "react";
+import { Form, useActionData } from "react-router-dom";
 import { GrGoogle } from "react-icons/gr";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from "../firebase/firebaseConfig";
+import { useSignup } from "../hooks/useSignup";
+import FormInput from "../components/FormInput";
 
 // context
-import { useContext } from "react";
+
+export const action = async ({ request }) => {
+  let formData = await request.formData();
+  let name = formData.get("displayName");
+  let email = formData.get("email");
+  let image = formData.get("image");
+  let password = formData.get("password");
+
+  return { name, email, image, password };
+};
 
 function Signup() {
-  const { dispatch } = useContext(GlobalContext);
-
-  const handleSignup = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-        dispatch({ type: "LOG_IN", payload: user });
-        console.log(user);
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(error.message);
-        // ...
-      });
-  };
+  const { signUpWithGoogle, registerWithEmailAndPassword } = useSignup();
 
   return (
-    <div className="hero min-h-screen ">
-      <div className="hero-content text-center">
-        <div className="max-w-4xl">
-          <h1 className="text-8xl font-bold mb-5">Login Now</h1>
-
+    <div className="min-h-screen  grid place-content-center">
+      <div className="mb-3">
+        <Form method="POST" >
+          <FormInput label="Display Name" type="text" name="displayName" />
+          <FormInput label="Email" type="email" name="email" />
+          <FormInput label="Image" type="url" name="image" />
+          <FormInput label="Password" type="password" name="password" />
           <button
-            onClick={handleSignup}
-            type="button"
-            className="btn btn-secondary "
+            onClick={registerWithEmailAndPassword}
+            type="submit"
+            className="btn btn-primary w-full mt-3"
           >
-            <span
-              className="flex items-center gap-1
-"
-            >
-              <GrGoogle className="w-5 h-5" />
-              <span>Signup</span>
-            </span>
+            Submit
           </button>
-        </div>
+        </Form>
+      </div>
+      <div>
+        <button
+          onClick={signUpWithGoogle}
+          type="button"
+          className="btn btn-secondary w-full"
+        >
+          <span
+            className="flex items-center gap-1
+"
+          >
+            <GrGoogle className="w-5 h-5" />
+            <span>Signup</span>
+          </span>
+        </button>
       </div>
     </div>
   );

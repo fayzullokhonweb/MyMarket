@@ -11,6 +11,9 @@ import Mainlayout from "./layout/Mainlayout";
 // components
 import ProtectedRoutes from "./components/ProtectedRoutes";
 
+// actions
+import { action as SignUpAction } from "./pages/Signup";
+
 // context
 import { useContext, useEffect } from "react";
 import { GlobalContext } from "./context/useGlobal";
@@ -27,7 +30,6 @@ import { auth } from "./firebase/firebaseConfig";
 
 function App() {
   const { user, dispatch, authReady } = useContext(GlobalContext);
-  console.log(user);
   const routes = createBrowserRouter([
     {
       path: "/",
@@ -62,6 +64,7 @@ function App() {
     {
       path: "/signup",
       element: user ? <Navigate to="/" /> : <Signup />,
+      action: SignUpAction,
     },
   ]);
   useEffect(() => {
@@ -70,8 +73,6 @@ function App() {
       dispatch({ type: "AUTH_READY" });
     });
   }, []);
-  return <>
-  {authReady && <RouterProvider router={routes} />}
-  </>;
+  return <>{authReady && <RouterProvider router={routes} />}</>;
 }
 export default App;

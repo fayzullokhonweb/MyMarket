@@ -7,6 +7,10 @@ import { auth } from "../firebase/firebaseConfig";
 
 import { GlobalContext } from "../context/useGlobal";
 
+import toast from "react-hot-toast";
+
+
+
 function Navbar() {
   const { dispatch, user } = useContext(GlobalContext);
   const [theme, setTheme] = useState(
@@ -29,6 +33,7 @@ function Navbar() {
     signOut(auth)
       .then(() => {
         dispatch({ type: "LOG_OUT" });
+        toast.success("Logout Successful");
       })
       .catch((error) => {
         console.log(error);
