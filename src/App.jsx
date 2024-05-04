@@ -26,8 +26,12 @@ import Contact from "./pages/Contact";
 import Product from "./pages/Product";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Cart from "./pages/Cart";
+
+// firebase
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase/firebaseConfig";
+import { auth, db } from "./firebase/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
 
 function App() {
   const { user, dispatch, authReady } = useContext(GlobalContext);
@@ -56,6 +60,10 @@ function App() {
           path: "/product/:id",
           element: <Product />,
         },
+        {
+          path: "/cart",
+          element: <Cart />,
+        },
       ],
     },
     {
@@ -74,6 +82,17 @@ function App() {
       dispatch({ type: "LOG_IN", payload: user });
       dispatch({ type: "AUTH_READY" });
     });
+
+    async function getData() {
+      const allData = [];
+      const querySnapshot = await getDocs(collection(db, "products"));
+      querySnapshot.forEach((item) => {
+        allData.push({ idf: item.id, ...item.data() });
+      });
+      dispatch({ type: "INITIAL_DATA", payload: allData });
+    }
+
+    getData();
   }, []);
   return <>{authReady && <RouterProvider router={routes} />}</>;
 }

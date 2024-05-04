@@ -16,6 +16,11 @@ const links = [
     text: "Contact",
     path: "/Contact",
   },
+  {
+    id: 4,
+    text: "Cart",
+    path: "/Cart",
+  },
 ];
 
 function NavLinks() {
