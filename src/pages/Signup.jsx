@@ -1,7 +1,8 @@
 import React from "react";
-import { Form, useActionData } from "react-router-dom";
+import { Form, Link, useActionData } from "react-router-dom";
 import { GrGoogle } from "react-icons/gr";
-import { useSignup } from "../hooks/useSignup";
+import { useSignup } from "../hooks/useSignUp";
+import { useEffect } from "react";
 import FormInput from "../components/FormInput";
 
 // context
@@ -19,10 +20,19 @@ export const action = async ({ request }) => {
 function Signup() {
   const { signUpWithGoogle, registerWithEmailAndPassword } = useSignup();
 
+  const actionData = useActionData();
+
+  useEffect(() => {
+    if (actionData) {
+      registerWithEmailAndPassword(actionData);
+    }
+  }, [actionData]);
+
   return (
     <div className="min-h-screen  grid place-content-center">
       <div className="mb-3">
-        <Form method="POST" >
+        <Form method="POST" className="w-96">
+          <h1 className="text-4xl text-center font-medium mb-3">SignUp</h1>
           <FormInput label="Display Name" type="text" name="displayName" />
           <FormInput label="Email" type="email" name="email" />
           <FormInput label="Image" type="url" name="image" />
@@ -50,6 +60,12 @@ function Signup() {
             <span>Signup</span>
           </span>
         </button>
+        <p className="mt-4 text-center">
+          Already registered ?{" "}
+          <Link to="/login" className="link link-primary">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );

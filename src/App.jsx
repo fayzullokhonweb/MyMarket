@@ -13,6 +13,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 
 // actions
 import { action as SignUpAction } from "./pages/Signup";
+import { action as LoginAction } from "./pages/Login";
 
 // context
 import { useContext, useEffect } from "react";
@@ -60,6 +61,7 @@ function App() {
     {
       path: "/login",
       element: user ? <Navigate to="/" /> : <Login />,
+      action: LoginAction,
     },
     {
       path: "/signup",

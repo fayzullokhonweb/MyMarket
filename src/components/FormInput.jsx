@@ -2,7 +2,7 @@ import React from "react";
 
 function FormInput({ label, name, type }) {
   return (
-    <label className="form-control w-full max-w-xs">
+    <label className="form-control w-full">
       <div className="label">
         <span className="label-text">{label}</span>
       </div>
@@ -10,7 +10,7 @@ function FormInput({ label, name, type }) {
         type={type}
         name={name}
         placeholder="Type here"
-        className="input input-bordered w-full max-w-xs"
+        className="input input-bordered w-full"
       />
     </label>
   );
